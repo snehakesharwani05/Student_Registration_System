@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Narula Institute of Technology | Student Registration System</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ============ DESIGN TOKENS ============ */
+  :root{
+    --bg:            #f4f4f6;
+    --bg-soft:       #ffffff;
+    --surface:       #ffffff;
+    --surface-alt:   #eceef1;
+    --text:          #232326;
+    --text-muted:    #6b6b72;
+    --border:        #e2e3e7;
+    --grey-dark:     #2b2b30;
+    --grey-deep:     #1c1c1f;
+    --orange:        #f2721e;
+    --orange-dark:   #d8590e;
+    --orange-soft:   rgba(242,114,30,0.12);
+    --shadow:        0 10px 30px rgba(30,30,35,0.07);
+    --shadow-hover:  0 18px 40px rgba(30,30,35,0.13);
+    --radius-lg:     22px;
+    --radius-md:     16px;
+    --radius-sm:     10px;
+    --nav-bg:        rgba(255,255,255,0.75);
+  }
+
+  [data-theme="dark"]{
+    --bg:            #17181a;
+    --bg-soft:       #1e1f22;
+    --surface:       #202124;
+    --surface-alt:   #26272b;
+    --text:          #f2f2f3;
+    --text-muted:    #a4a5ac;
+    --border:        #303136;
+    --grey-dark:     #d9d9dc;
+    --grey-deep:     #f2f2f3;
+    --orange:        #ff8a3d;
+    --orange-dark:   #ff9f5c;
+    --orange-soft:   rgba(255,138,61,0.16);
+    --shadow:        0 10px 30px rgba(0,0,0,0.35);
+    --shadow-hover:  0 18px 40px rgba(0,0,0,0.5);
+    --nav-bg:        rgba(30,31,34,0.75);
+  }
+
+  *{ box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    transition:background .35s ease, color .35s ease;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,h4,.brand,.stat-number{
+    font-family:'Poppins', sans-serif;
+  }
+
+  a{ text-decoration:none; }
+
+  ::selection{ background:var(--orange-soft); color:var(--orange-dark); }
+
+  /* ============ NAVBAR ============ */
+  .navbar-custom{
+    background:var(--nav-bg);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:1000;
+    transition:background .35s ease, border-color .35s ease;
+  }
+
+  .brand{
+    font-weight:800;
+    font-size:1.25rem;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    letter-spacing:.2px;
+  }
+  .brand-mark{
+    width:40px; height:40px;
+    border-radius:12px;
+    background:linear-gradient(135deg, var(--orange), var(--orange-dark));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:1.05rem; font-weight:800;
+    box-shadow:0 6px 16px rgba(242,114,30,0.35);
+    flex-shrink:0;
+  }
+  .brand small{
+    display:block;
+    font-family:'Inter',sans-serif;
+    font-weight:500;
+    font-size:.68rem;
+    color:var(--text-muted);
+    letter-spacing:.5px;
+  }
+
+  .nav-link-custom{
+    color:var(--text) !important;
+    font-weight:500;
+    font-size:.95rem;
+    padding:.5rem 1rem !important;
+    border-radius:10px;
+    position:relative;
+    transition:color .25s ease, background .25s ease;
+  }
+  .nav-link-custom:hover{
+    color:var(--orange) !important;
+    background:var(--orange-soft);
+  }
+
+  .theme-toggle{
+    width:46px; height:46px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    background:var(--surface-alt);
+    color:var(--text);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:transform .3s ease, background .3s ease, color .3s ease;
+    flex-shrink:0;
+  }
+  .theme-toggle:hover{ transform:rotate(20deg) scale(1.07); color:var(--orange); }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    padding:6rem 0 5rem;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    top:-120px; right:-120px;
+    width:480px; height:480px;
+    background:radial-gradient(circle, var(--orange-soft) 0%, transparent 70%);
+    z-index:0;
+  }
+  .hero-eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    background:var(--orange-soft);
+    color:var(--orange-dark);
+    font-weight:600;
+    font-size:.8rem;
+    padding:.45rem 1rem;
+    border-radius:50px;
+    margin-bottom:1.5rem;
+  }
+  [data-theme="dark"] .hero-eyebrow{ color:var(--orange); }
+
+  .hero h1{
+    font-weight:800;
+    font-size:3.2rem;
+    line-height:1.15;
+    letter-spacing:-1px;
+    margin-bottom:1.25rem;
+  }
+  .hero h1 span{
+    color:var(--orange);
+    position:relative;
+  }
+  .hero p.lead-text{
+    color:var(--text-muted);
+    font-size:1.12rem;
+    max-width:520px;
+    margin-bottom:2.2rem;
+  }
+
+  .btn-orange{
+    background:var(--orange);
+    border:1px solid var(--orange);
+    color:#fff;
+    font-weight:600;
+    padding:.85rem 1.8rem;
+    border-radius:50px;
+    box-shadow:0 10px 24px rgba(242,114,30,0.32);
+    transition:all .3s ease;
+  }
+  .btn-orange:hover{
+    background:var(--orange-dark);
+    border-color:var(--orange-dark);
+    color:#fff;
+    transform:translateY(-3px);
+    box-shadow:0 14px 30px rgba(242,114,30,0.42);
+  }
+  .btn-outline-custom{
+    background:transparent;
+    border:1.5px solid var(--border);
+    color:var(--text);
+    font-weight:600;
+    padding:.85rem 1.8rem;
+    border-radius:50px;
+    transition:all .3s ease;
+  }
+  .btn-outline-custom:hover{
+    border-color:var(--orange);
+    color:var(--orange);
+    transform:translateY(-3px);
+    background:var(--orange-soft);
+  }
+
+  /* Hero visual - ID card mockup */
+  .id-card{
+    position:relative;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-hover);
+    padding:1.8rem;
+    max-width:380px;
+    margin-left:auto;
+    transform:rotate(2deg);
+    transition:transform .4s ease;
+  }
+  .id-card:hover{ transform:rotate(0deg) translateY(-6px); }
+  .id-card-top{
+    display:flex; justify-content:space-between; align-items:center;
+    padding-bottom:1rem;
+    border-bottom:2px dashed var(--border);
+    margin-bottom:1.2rem;
+  }
+  .id-card-top span{ font-weight:700; font-size:.85rem; color:var(--text-muted); letter-spacing:.5px; }
+  .id-badge{
+    background:var(--orange-soft); color:var(--orange-dark);
+    font-size:.7rem; font-weight:700; padding:.25rem .65rem; border-radius:50px;
+  }
+  [data-theme="dark"] .id-badge{ color:var(--orange); }
+  .id-avatar{
+    width:64px; height:64px; border-radius:16px;
+    background:linear-gradient(135deg, var(--orange), var(--orange-dark));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:1.6rem;
+    margin-bottom:1rem;
+  }
+  .id-row{
+    display:flex; justify-content:space-between; padding:.4rem 0;
+    font-size:.87rem; border-bottom:1px solid var(--border);
+  }
+  .id-row:last-child{ border-bottom:none; }
+  .id-row span:first-child{ color:var(--text-muted); }
+  .id-row span:last-child{ font-weight:600; }
+  .id-float{
+    position:absolute; bottom:-18px; left:-18px;
+    background:var(--grey-deep);
+    color:var(--bg-soft);
+    padding:.7rem 1.1rem; border-radius:14px;
+    font-size:.8rem; font-weight:600;
+    box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:.5rem;
+  }
+  [data-theme="dark"] .id-float{ background:var(--orange); color:#1c1c1f; }
+  .id-float i{ color:var(--orange); }
+  [data-theme="dark"] .id-float i{ color:#1c1c1f; }
+
+  /* ============ SECTIONS GENERIC ============ */
+  section{ padding:5.5rem 0; position:relative; }
+  .section-tag{
+    color:var(--orange);
+    font-weight:700;
+    letter-spacing:1.5px;
+    font-size:.78rem;
+    text-transform:uppercase;
+    margin-bottom:.6rem;
+    display:block;
+  }
+  .section-title{
+    font-weight:800;
+    font-size:2.2rem;
+    letter-spacing:-.5px;
+    margin-bottom:.75rem;
+  }
+  .section-sub{
+    color:var(--text-muted);
+    max-width:600px;
+    margin:0 auto;
+  }
+  .text-center-block{ text-align:center; margin-bottom:3.5rem; }
+
+  /* ============ CARDS ============ */
+  .feature-card, .why-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:2.1rem 1.8rem;
+    height:100%;
+    box-shadow:var(--shadow);
+    transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+  }
+  .feature-card:hover, .why-card:hover{
+    transform:translateY(-8px);
+    box-shadow:var(--shadow-hover);
+    border-color:var(--orange);
+  }
+  .feature-icon{
+    width:60px; height:60px;
+    border-radius:16px;
+    background:var(--orange-soft);
+    color:var(--orange);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem;
+    margin-bottom:1.3rem;
+    transition:background .35s ease, color .35s ease, transform .35s ease;
+  }
+  .feature-card:hover .feature-icon{
+    background:var(--orange);
+    color:#fff;
+    transform:scale(1.08) rotate(-6deg);
+  }
+  .feature-card h5, .why-card h5{ font-weight:700; margin-bottom:.6rem; }
+  .feature-card p, .why-card p{ color:var(--text-muted); font-size:.93rem; margin-bottom:0; }
+
+  /* ============ STATS ============ */
+  .stats-section{
+    background:var(--grey-deep);
+    border-radius:var(--radius-lg);
+    margin:0 auto;
+    max-width:1200px;
+    padding:3.5rem 2rem;
+    box-shadow:var(--shadow);
+  }
+  [data-theme="dark"] .stats-section{ background:var(--surface-alt); border:1px solid var(--border); }
+  .stat-item{ text-align:center; }
+  .stat-number{
+    font-size:2.6rem;
+    font-weight:800;
+    color:var(--orange);
+    line-height:1;
+    margin-bottom:.5rem;
+  }
+  .stat-label{
+    color:#c9c9cd;
+    font-weight:500;
+    font-size:.92rem;
+    letter-spacing:.3px;
+  }
+  [data-theme="dark"] .stat-label{ color:var(--text-muted); }
+
+  /* ============ WHY CHOOSE US ============ */
+  .why-card{ text-align:center; }
+  .why-icon{
+    width:70px; height:70px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--orange), var(--orange-dark));
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.7rem;
+    margin:0 auto 1.3rem;
+    box-shadow:0 10px 22px rgba(242,114,30,0.3);
+  }
+
+  /* ============ CTA ============ */
+  .cta-section{
+    border-radius:var(--radius-lg);
+    max-width:1200px;
+    margin:0 auto;
+    padding:4.5rem 2rem;
+    text-align:center;
+    background:linear-gradient(120deg, var(--orange-dark) 0%, var(--orange) 55%, #ffb066 100%);
+    box-shadow:0 20px 45px rgba(242,114,30,0.3);
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-section::after{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(circle at 80% 20%, rgba(255,255,255,0.25), transparent 55%);
+  }
+  .cta-section h2{
+    color:#fff; font-weight:800; font-size:2.1rem;
+    margin-bottom:1rem; position:relative; z-index:1;
+  }
+  .cta-section p{
+    color:rgba(255,255,255,0.92); margin-bottom:2rem; position:relative; z-index:1;
+  }
+  .btn-cta{
+    background:#fff; color:var(--orange-dark);
+    font-weight:700; padding:.9rem 2.2rem;
+    border-radius:50px; border:none;
+    box-shadow:0 12px 26px rgba(0,0,0,0.18);
+    position:relative; z-index:1;
+    transition:all .3s ease;
+  }
+  .btn-cta:hover{ transform:translateY(-4px); box-shadow:0 16px 32px rgba(0,0,0,0.24); color:var(--orange-dark); }
+
+  /* ============ FOOTER ============ */
+  footer{
+    background:var(--grey-deep);
+    color:#d6d6da;
+    padding:4rem 0 1.5rem;
+    transition:background .35s ease;
+  }
+  [data-theme="dark"] footer{ background:#111214; border-top:1px solid var(--border); }
+  footer h5{ color:#fff; font-weight:700; margin-bottom:1.1rem; }
+  footer a{ color:#adadb3; transition:color .25s ease; }
+  footer a:hover{ color:var(--orange); }
+  footer p{ color:#adadb3; font-size:.92rem; }
+  .footer-divider{ border-color:rgba(255,255,255,0.08); margin:2.2rem 0 1.4rem; }
+  .footer-bottom{ font-size:.85rem; color:#8c8c93; text-align:center; }
+  .social-icon{
+    width:38px; height:38px; border-radius:50%;
+    background:rgba(255,255,255,0.06);
+    display:flex; align-items:center; justify-content:center;
+    margin-right:.6rem; transition:all .3s ease;
+  }
+  .social-icon:hover{ background:var(--orange); transform:translateY(-3px); }
+
+  /* Reveal on scroll */
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.active{ opacity:1; transform:translateY(0); }
+
+  @media (max-width: 991px){
+    .hero h1{ font-size:2.4rem; }
+    .id-card{ margin:3rem auto 0; transform:none; }
+    .stats-section{ padding:2.5rem 1.2rem; }
+    .stat-number{ font-size:2.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg navbar-custom py-3">
+  <div class="container">
+    <a class="brand" href="#home">
+      <span class="brand-mark">NIT</span>
+      <span>
+        Narula Institute of Technology
+        <small>Student Registration System</small>
+      </span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <i class="fa-solid fa-bars fa-lg"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1 mt-3 mt-lg-0">
+        <li class="nav-item"><a class="nav-link nav-link-custom" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom" href="#register">Register Student</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom" href="{% url 'student_list' %}">Student List</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-custom" href="#contact">Contact</a></li>
+        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode">
+            <i class="fa-solid fa-moon" id="themeIcon"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section id="home" class="hero">
+  <div class="container position-relative" style="z-index:1;">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <span class="hero-eyebrow"><i class="fa-solid fa-graduation-cap"></i> Narula Institute of Technology</span>
+        <h1>Student Registration <span>System</span></h1>
+        <p class="lead-text">A simple and secure platform to register, manage, search, update, and maintain student records efficiently.</p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="#register" class="btn btn-orange"><i class="fa-solid fa-user-plus me-2"></i>Register Student</a>
+          <a href="{% url 'student_list' %}" class="btn btn-outline-custom"><i class="fa-solid fa-list-ul me-2"></i>View Students</a>
+        </div>
+      </div>
+      <div class="col-lg-6 mt-5 mt-lg-0">
+        <div class="id-card">
+          <div class="id-card-top">
+            <span>STUDENT ID</span>
+            <span class="id-badge">ACTIVE</span>
+          </div>
+          <div class="id-avatar"><i class="fa-solid fa-user"></i></div>
+          {% if student %}
+
+          <div class="id-row">
+              <span>Name</span>
+              <span>{{ student.1 }}</span>
+          </div>
+
+          <div class="id-row">
+              <span>Roll No.</span>
+              <span>{{ student.2 }}</span>
+          </div>
+
+          <div class="id-row">
+              <span>Department</span>
+              <span>{{ student.3 }}</span>
+          </div>
+
+          <div class="id-row">
+              <span>Semester</span>
+              <span>{{ student.4 }}</span>
+          </div>
+
+          {% else %}
+
+          <div class="id-row"><span>Name</span><span>-</span></div>
+          <div class="id-row"><span>Roll No.</span><span>-</span></div>
+          <div class="id-row"><span>Department</span><span>-</span></div>
+          <div class="id-row"><span>Semester</span><span>-</span></div>
+
+          {% endif %}
+          <div class="id-float"><i class="fa-solid fa-shield-halved"></i> Secured on Amazon RDS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section id="features">
+  <div class="container">
+    <div class="text-center-block reveal">
+      <span class="section-tag">What you can do</span>
+      <h2 class="section-title">Everything a student office needs</h2>
+
+      <p class="section-sub">Built to make daily registration work fast, accurate, and hassle-free.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3 reveal">
+        <a href="{% url 'register' %}" style="text-decoration:none; color:inherit;">
+          <div class="feature-card">
+
+            <div class="feature-icon"><i class="fa-solid fa-user-plus"></i></div>
+            <h5>Student Registration</h5>
+            <p>Register new students quickly with a clean, guided form.</p>
+        </div>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3 reveal">
+        <a href="{% url 'student_list' %}" style="text-decoration:none; color:inherit;">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <h5>Search Records</h5>
+            <p>Find students instantly by roll number or name.</p>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3 reveal">
+        <a href="{% url 'update' student.0 %}" style="text-decoration:none; color:inherit;">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+            <h5>Update Details</h5>
+            <p>Edit student information anytime, kept always up to date.</p>
+            
+        
+          </div>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3 reveal">
+        
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-database"></i></div>
+            <h5>Secure Database</h5>
+            <p>Every record is encrypted and backed up on trusted cloud infrastructure.</p>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-section reveal">
+      <div class="row g-4">
+        <div class="col-6 col-lg-3 stat-item">
+          <div class="stat-number" data-count="4820">0</div>
+          <div class="stat-label">Total Students</div>
+        </div>
+        <div class="col-6 col-lg-3 stat-item">
+          <div class="stat-number" data-count="8">0</div>
+          <div class="stat-label">Departments</div>
+        </div>
+        <div class="col-6 col-lg-3 stat-item">
+          <div class="stat-number" data-count="8">0</div>
+          <div class="stat-label">Semesters</div>
+        </div>
+        <div class="col-6 col-lg-3 stat-item">
+          <div class="stat-number" data-count="37">0</div>
+          <div class="stat-label">Registered Today</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY CHOOSE US ================= -->
+<section id="about">
+  <div class="container">
+    <div class="text-center-block reveal">
+      <span class="section-tag">Why choose us</span>
+      <h2 class="section-title">Reliable by design</h2>
+      <p class="section-sub">A registration platform built for accuracy, speed, and peace of mind.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 reveal">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-bolt"></i></div>
+          <h5>Fast Registration</h5>
+          <p>Onboard new students in minutes with a streamlined workflow.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-cloud"></i></div>
+          <h5>Secure Cloud Storage</h5>
+          <p>Every record is encrypted and backed up on trusted cloud infrastructure.</p>
+        </div>
+      </div>
+      <div class="col-md-4 reveal">
+        <div class="why-card">
+          <div class="why-icon"><i class="fa-solid fa-layer-group"></i></div>
+          <h5>Easy Student Management</h5>
+          <p>Search, update, and organize records without any friction.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section id="register">
+  <div class="container">
+    <div class="cta-section reveal">
+      <h2>Start Managing Student Records Today</h2>
+      <p>Join the Narula Institute of Technology registration portal in just a few clicks.</p>
+      <a href="{% url 'register' %}"  class="btn btn-cta"><i class="fa-solid fa-user-plus me-2"></i>Register Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer id="contact">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <h5><i class="fa-solid fa-graduation-cap me-2" style="color:var(--orange);"></i>Narula Institute of Technology</h5>
+        <p>Empowering student administration with a fast, secure, and modern registration system.</p>
+        <div class="d-flex mt-3">
+          <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-4">
+        <h5>Quick Links</h5>
+        <ul class="list-unstyled d-flex flex-column gap-2">
+          <li><a href="#home">Home</a></li>
+          <li><a href="{% url 'register' %}">Register Student</a></li>
+          <li><a href="{% url 'student_list' %}">Student List</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <h5>Student List</h5>
+        <ul class="list-unstyled d-flex flex-column gap-2">
+          <li><a href="#students">View All Students</a></li>
+          <li><a href="#">Department Wise</a></li>
+          <li><a href="#">Semester Wise</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <h5>Contact Information</h5>
+        <ul class="list-unstyled d-flex flex-column gap-2">
+          <li><i class="fa-solid fa-location-dot me-2" style="color:var(--orange);"></i>Agarpara, Kolkata, West Bengal</li>
+          <li><i class="fa-solid fa-envelope me-2" style="color:var(--orange);"></i>info@nit.edu.in</li>
+          <li><i class="fa-solid fa-phone me-2" style="color:var(--orange);"></i>+91 98765 43210</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="footer-divider">
+    <div class="footer-bottom">
+      &copy; 2026 Narula Institute of Technology. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ---------- Theme toggle ----------
+  const root = document.documentElement;
+  const toggleBtn = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+
+  function applyTheme(theme){
+    root.setAttribute('data-theme', theme);
+    themeIcon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    localStorage.setItem('nit-theme', theme);
+  }
+
+  const savedTheme = localStorage.getItem('nit-theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  applyTheme(savedTheme);
+
+  toggleBtn.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  // ---------- Scroll reveal ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('active');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // ---------- Animated counters ----------
+  const counters = document.querySelectorAll('.stat-number');
+  let counted = false;
+  function runCounters(){
+    if(counted) return;
+    counted = true;
+    counters.forEach(counter => {
+      const target = +counter.getAttribute('data-count');
+      const duration = 1400;
+      const startTime = performance.now();
+      function update(now){
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        counter.textContent = Math.floor(eased * target).toLocaleString();
+        if(progress < 1) requestAnimationFrame(update);
+        else counter.textContent = target.toLocaleString();
+      }
+      requestAnimationFrame(update);
+    });
+  }
+  const statsSection = document.getElementById('stats');
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if(entry.isIntersecting) runCounters(); });
+  }, { threshold: 0.3 });
+  statsObserver.observe(statsSection);
+</script>
+</body>
+</html>

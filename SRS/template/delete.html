@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Delete Confirmation</title>
+<style>
+  :root {
+    --bg: #1e1f22;
+    --panel: #2b2d31;
+    --panel-border: #3a3c40;
+    --white: #f4f4f5;
+    --grey: #9a9ba0;
+    --orange: #ff7a1a;
+    --orange-dark: #e0620a;
+    --danger-glow: rgba(255, 122, 26, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
+  .trigger-btn {
+    background: transparent;
+    color: var(--orange);
+    border: 2px solid var(--orange);
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .trigger-btn:hover {
+    background: var(--orange);
+    color: var(--bg);
+    box-shadow: 0 0 20px var(--danger-glow);
+  }
+
+  /* Overlay */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease;
+    z-index: 999;
+  }
+
+  .overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Modal box */
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-top: 4px solid var(--orange);
+    border-radius: 12px;
+    padding: 32px 36px;
+    width: 340px;
+    max-width: 90vw;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    transform: scale(0.85) translateY(20px);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .overlay.active .modal {
+    transform: scale(1) translateY(0);
+  }
+
+  .icon-circle {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: var(--danger-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-circle span {
+    color: var(--orange);
+    font-size: 28px;
+    font-weight: 800;
+  }
+
+  .modal h2 {
+    color: var(--white);
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin: 0 0 8px;
+  }
+
+  .modal p {
+    color: var(--grey);
+    font-size: 14px;
+    margin: 0 0 26px;
+    line-height: 1.5;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 12px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn:active {
+    transform: scale(0.96);
+  }
+
+  .btn-yes {
+    background: var(--orange);
+    color: #1e1f22;
+  }
+
+  .btn-yes:hover {
+    background: var(--orange-dark);
+    box-shadow: 0 0 18px var(--danger-glow);
+  }
+
+  .btn-no {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid var(--panel-border);
+  }
+
+  .btn-no:hover {
+    background: #3a3c40;
+  }
+
+  .result-msg {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--grey);
+    min-height: 18px;
+  }
+
+  .result-msg.deleted { color: var(--orange); }
+</style>
+</head>
+<body>
+
+<button class="trigger-btn" onclick="openModal()">Delete Item</button>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="icon-circle"><span>!</span></div>
+    <h2>ARE YOU SURE?</h2>
+    <p>This action cannot be undone. The item will be permanently deleted.</p>
+    <div class="btn-row">
+      <button class="btn btn-yes" onclick="confirmDelete()">YES</button>
+      <button class="btn btn-no" onclick="closeModal()">NO</button>
+    </div>
+  </div>
+</div>
+
+<div class="result-msg" id="resultMsg"></div>
+
+<script>
+  const overlay = document.getElementById('overlay');
+  const resultMsg = document.getElementById('resultMsg');
+
+  function openModal() {
+    overlay.classList.add('active');
+    resultMsg.textContent = '';
+    resultMsg.className = 'result-msg';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('active');
+  }
+
+  function confirmDelete() {
+    closeModal();
+    resultMsg.textContent = 'Item deleted.';
+    resultMsg.classList.add('deleted');
+  }
+
+  // Close on clicking outside modal
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>
+
+</body>
+</html>
